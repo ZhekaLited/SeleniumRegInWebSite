@@ -1,0 +1,55 @@
+import dev.failsafe.internal.util.Assert;
+import org.junit.jupiter.api.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)  //Что бы тест кейсы не перемешивались . Для Order
+public class GithubTest {
+    public static WebDriver driver;  //Создание обьекта
+    private final String baseUrl ="https://www.github.com/"; //Строка нужна для открытие определенного URL
+
+    @Test
+    @Order(1) //Порядок будет начинаться с 1 и т.д как выставишь
+    public void openbrowser() {
+        System.setProperty("webdriver.chrome.driver", "d:/гк/chromedriver.exe"); //Подключили драйвер
+        driver = new ChromeDriver(); //Создание обьет драйвера
+        driver.get(baseUrl); //Указывает на ссылку
+        driver.manage().window().maximize(); //Открытие на полное окно
+
+    }
+
+    @Test
+    @Order(2)
+    public void getTitle() {
+        Assertions.assertTrue(driver.getTitle().toUpperCase().contains("Github".toUpperCase())); //Тайтл сравнивается . Для нахождение общего
+    }
+
+    @Test
+    @Order(3)
+    public void gotoLing() {
+        driver.get(baseUrl+"login"); //Захождение в "login"
+    }
+
+    @Test
+    @Order(4)
+    public void signIn() {
+        WebElement input = driver.findElement(By.id("login_field")); //Ищем элемент на странице
+        input.sendKeys("ZhekaLited"); //Отправляем строку ввода
+        input = driver.findElement(By.id("password")); // Вставляем строчку пароля . Отправляя строку
+        input.sendKeys("йуйуйуйу");//Пишем свой пароль
+        input = driver.findElement(By.xpath("//input[@name='commit']")); //@Уникальным образом сделать элемент
+        input.click();
+
+    }
+
+    @Test
+    @Order(5)
+    public void signOut() { //Делаем выход их приложения
+        driver.get(baseUrl+"logout");
+        WebElement input = driver.findElement(By.xpath("//input[@value='Sign out']"));
+        input.click(); //Для нажатия кнопки
+        driver.quit();
+    }
+}
